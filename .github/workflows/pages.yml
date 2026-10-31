@@ -29,10 +29,14 @@ jobs:
           node-version: 24
           cache: npm
           cache-dependency-path: site-next/package-lock.json
+      # Endereço e subpasta do site no GitHub Pages (ex.: https://lowtechpt.github.io/JCC e /JCC)
+      - id: pages
+        uses: actions/configure-pages@v6
       - run: npm ci
       - run: npm run build
         env:
-          PAGES_BASE_PATH: JCC
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          PAGES_SITE_URL: ${{ steps.pages.outputs.base_url }}
       # Sem isto o GitHub Pages podia ignorar a pasta _next/
       - run: touch out/.nojekyll
       - uses: actions/upload-pages-artifact@v5

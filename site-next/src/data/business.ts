@@ -3,7 +3,11 @@
  * Usado no cabeçalho, rodapé, contactos, JSON-LD e no script "aberto agora".
  * Fonte: JCC_INFO_SITE.md (confirmado pelo dono).
  */
-export const SITE_URL = 'https://www.jccpt.com';
+/**
+ * Endereço público do site. A pré-visualização no GitHub Pages usa o seu (PAGES_SITE_URL no workflow), para as
+ * partilhas no WhatsApp/Facebook e o canonical apontarem para onde o site está mesmo; sem isso fica o domínio final.
+ */
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.jccpt.com';
 
 export type Slot = [open: string, close: string];
 

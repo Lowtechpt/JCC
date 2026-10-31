@@ -61,8 +61,60 @@ await writeFile(
   'utf8',
 );
 
-// OG 1200x630 a partir da fachada (a original e pequena: ampliacao inevitavel, recorte centrado)
-await sharp(path.join(SRC, photos.fachada)).resize(1200, 630, { fit: 'cover', position: 'centre' }).jpeg({ quality: 86 }).toFile(path.resolve('public', 'og-image.jpg'));
+// Imagem de partilha (WhatsApp, Facebook...), 1200x630 no estilo do site: marca, titulo e linha em Geist (a letra
+// do site) a esquerda, foto do interior da loja a direita. Fica bem abaixo dos 300 KB que o WhatsApp aceita.
+const FONTS = path.resolve('node_modules', 'geist', 'dist', 'fonts', 'geist-sans');
+const ink = '#0A0D14';
+const blue = '#1F55F0';
+const grey = '#5F6779';
+const label = (markup, size, weight, width) =>
+  sharp({
+    text: {
+      text: markup,
+      font: `Geist ${weight} ${size}`,
+      fontfile: path.join(FONTS, `Geist-${weight}.ttf`),
+      width,
+      dpi: 72,
+      rgba: true,
+      spacing: Math.round(size * 0.12),
+    },
+  })
+    .png()
+    .toBuffer();
+const markSvg = Buffer.from(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 10 40 50" width="46" height="58"><g fill="${blue}"><polygon points="40,10 52,22 40,34 28,22"/><polygon points="24,25 36,37 24,49 12,37"/><polygon points="40,36 52,48 40,60 28,48"/></g></svg>`,
+);
+const [photoW, photoH] = [520, 550];
+const ogPhoto = await sharp(path.join(SRC, photos.interior))
+  .resize(photoW, photoH, { fit: 'cover', position: 'centre' })
+  .composite([{ input: Buffer.from(`<svg width="${photoW}" height="${photoH}"><rect width="${photoW}" height="${photoH}" rx="28"/></svg>`), blend: 'dest-in' }])
+  .png()
+  .toBuffer();
+// Cada bloco e posto pela altura real do texto de cima, para nada se sobrepor
+const heightOf = async (buf) => (await sharp(buf).metadata()).height;
+const mark = await sharp(markSvg, { density: 288 }).resize({ height: 52 }).png().toBuffer();
+const brand = await label(`<span foreground="${ink}">JCC Computadores</span>`, 30, 'Bold', 420);
+const headline = await label(
+  `<span foreground="${ink}">Reparar é sempre\na </span><span foreground="${blue}">melhor</span><span foreground="${ink}"> escolha.</span>`,
+  56,
+  'Bold',
+  520,
+);
+const sub = await label(`<span foreground="${grey}">Computadores, telemóveis,\ntelevisões e consolas.</span>`, 28, 'Regular', 500);
+const place = await label(`<span foreground="${ink}">Leça da Palmeira · desde 1994</span>`, 26, 'SemiBold', 500);
+const headTop = 196;
+const subTop = headTop + (await heightOf(headline)) + 40;
+await sharp({ create: { width: 1200, height: 630, channels: 3, background: '#ffffff' } })
+  .composite([
+    { input: mark, left: 64, top: 64 },
+    { input: brand, left: 124, top: 64 + Math.round((52 - (await heightOf(brand))) / 2) },
+    { input: headline, left: 64, top: headTop },
+    { input: sub, left: 64, top: subTop },
+    { input: place, left: 64, top: 630 - 64 - (await heightOf(place)) },
+    { input: ogPhoto, left: 616, top: 40 },
+  ])
+  .jpeg({ quality: 86, mozjpeg: true })
+  .toFile(path.resolve('public', 'og-image.jpg'));
 
 // logo para JSON-LD
 await sharp(path.join(SRC, 'logo.png')).resize(512, 512).png().toFile(path.resolve('public', 'logo-jcc.png'));

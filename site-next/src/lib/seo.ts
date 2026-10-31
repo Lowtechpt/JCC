@@ -24,7 +24,7 @@ export function pageMetadata({
       title,
       description,
       url,
-      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'Loja JCC Computadores, em Leça da Palmeira, desde 1994' }],
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: 'JCC Computadores: reparar é sempre a melhor escolha. Interior da loja em Leça da Palmeira, desde 1994' }],
     },
     twitter: {
       card: 'summary_large_image',
