@@ -1,0 +1,21 @@
+# Fica só no PC (não vai para o GitHub)
+/site/
+/mockups/
+/arquivo/
+/graphify-out/
+/site-next/graphify-out/
+/.claude/
+/CLAUDE.md
+/CONTEXT_BRIEF.md
+/SESSION_LOG.md
+/PROJECT_CONTEXT.md
+/DESIGN_BRIEF.md
+/DESIGN_BRIEF_V2.md
+/lh*.json
+
+# Gerado no build
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+.env*

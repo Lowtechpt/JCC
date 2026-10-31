@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* Tokens da proposta B (mockups/b-claro.html), escolhida pelo Luis a 2026-10-31 */
+:root {
+  --brand: #1f55f0;
+  --brand-hover: #1a45c4;
+  --brand-soft: #7fa2ff;
+  --bg: #ffffff;
+  --bg-alt: #f2f4f8;
+  --text: #0a0d14;
+  --text-2: #5f6779;
+  --line: #e3e6ec;
+  --dark: #0a0d14;
+  --dark-line: #262b36;
+  --whatsapp: #25d366;
+  --header-h: 60px;
+  --bar-h: 72px;
+}
+
+/* Tokens semânticos (skill tailwind-design-system): a paleta por defeito do Tailwind é
+   removida de propósito, para só existir a cor de marca e os neutros do brief. */
+@theme inline {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-primary: var(--brand);
+  --color-primary-hover: var(--brand-hover);
+  --color-primary-foreground: #ffffff;
+  --color-primary-soft: var(--brand-soft);
+  --color-dark-line: var(--dark-line);
+  --color-muted: var(--bg-alt);
+  --color-muted-foreground: var(--text-2);
+  --color-border: var(--line);
+  --color-ring: var(--brand);
+  --color-dark: var(--dark);
+  --color-dark-foreground: #ffffff;
+  --color-whatsapp: var(--whatsapp);
+  --color-status-off: #a1a1a6;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 26px;
+  --radius-band: 40px;
+  --radius-pill: 980px;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html {
+  font-size: 16px;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 768px) {
+  body {
+    padding-bottom: 0;
+  }
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 650;
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: 3px;
+}
+
+.on-dark :focus-visible,
+.on-brand :focus-visible {
+  outline-color: #fff;
+}
+
+::selection {
+  background: var(--brand);
+  color: #fff;
+}
+
+/* Tipografia de secção */
+/* Escala modular (skill ui-ux-pro-max: escala consistente, texto base 16px).
+   Luis, 2026-10-31: "está tudo gigante" e depois "as coisas continuam grandes".
+   Calibrada pelos sites de referência (Apple ~48-56px no título principal). Nada passa dos 56px. */
+.h1-hero {
+  font-size: clamp(2.125rem, 3.8vw, 3.5rem); /* 34 -> 56px */
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+.h1-page {
+  font-size: clamp(1.875rem, 3vw, 2.75rem); /* 30 -> 44px */
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+.h2-section {
+  font-size: clamp(1.5rem, 2.2vw, 2.125rem); /* 24 -> 34px */
+  line-height: 1.12;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+.h3-card {
+  font-size: clamp(1.125rem, 1.4vw, 1.375rem); /* 18 -> 22px */
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 650;
+}
+.h3-small {
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  font-weight: 650;
+}
+/* Números grandes (estatísticas) */
+.stat-num {
+  font-size: clamp(1.625rem, 2.2vw, 2rem); /* 26 -> 32px */
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+/* Texto de apoio: cinzento, nunca maior que 19-20px */
+.lead {
+  font-size: 1rem; /* 16px */
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+/* Contentor largo, adaptativo */
+.wrap {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2.5rem);
+}
+.section {
+  padding-block: clamp(3.5rem, 5.5vw, 4.75rem);
+}
+
+.link-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 44px;
+  color: var(--brand);
+  font-weight: 600;
+}
+.link-more:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.on-brand .link-more,
+.on-dark .link-more {
+  color: #fff;
+}
+
+.sr-only-focusable:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+/* Sem animações para quem pede redução */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Fila horizontal de equipamentos: esconde a barra */
+.hscroll {
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.hscroll::-webkit-scrollbar {
+  display: none;
+}
